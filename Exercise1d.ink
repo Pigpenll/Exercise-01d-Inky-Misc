@@ -13,7 +13,7 @@ This exercise will demonstrate the following in the example video:
 */
 
 
-VAR time = 0 //  0 Morning, 1 Noon, 2 Night
+VAR time = -1 //  0 Morning, 1 Noon, 2 Night
 
 
 
@@ -23,16 +23,57 @@ VAR time = 0 //  0 Morning, 1 Noon, 2 Night
 == seashore ==
 You are sitting on the beach. 
 
-+ [Wait] -> seashore
+//{&You hear seagulls.|The sun blazes directly above you.|It's getting pretty dark out.|The moon shines above you.}
+
+It is { advance_time() }.
+
++ [Wait.] -> seashore
+
++ [Stand up and walk.] -> beach2
++ {not photo2} [Look at photgraph.] -> photo1
+-> DONE
+
+== photo1 ==
+You pull the photograph out of your pocket.
+
+{Your family stares back at you, grins stretched across their faces.|Familiar faces with no names stare at you, smiling.|A group of smiling strangers is depicted.|The polaroid is blank.}
+
++ [Wait.] -> seashore
++ [Stand up and walk.] -> beach2
+* [Toss the photo away.] -> photo2
+* {photo1 > 3} [Try to remember.] -> remember
+-> DONE
+
+== remember ==
+You focus on the sound of the crashing waves.
+
+Faces and names swim around your thoughts.
+
+* [You hear a faint beeping.] -> END
+-> DONE
+
+== photo2 ==
+You toss the photo into the waves. You watch it slowly drift away.
+
+You forget what you are looking at.
+
++ [Walk.] -> beach2
 -> DONE
 
 == beach2 ==
-This is further down the beach.
+A continuous stretch of sand.
 
-+ [Move back up the beach] -> seashore
+{time == 0 && not shells:Ornate shells decorate the sand around you.}
+
+It is { advance_time() }.
+
++ [Continue walking.] -> beach2
++ [Sit back down.] -> seashore
+* {time == 1} [Pick up seashells.] -> shells
+->DONE
 
 == shells ==
-You pick up the shells
+You put the seashells in your pocket. {not photo2:The photo is slightly crinkled.}
 -> beach2
 
 == function advance_time ==
@@ -43,19 +84,19 @@ You pick up the shells
         - time > 2:
             ~ time = 0
     }    
-    /*
+    
     {    
         - time == 0:
-            ~ return "Morning"
+            ~ return "morning"
         
         - time == 1:
-            ~ return "Noon"
+            ~ return "noon"
         
         - time == 2:
-            ~ return "Night"
+            ~ return "night"
     
     }
-    */
+    
     
         
     ~ return time
